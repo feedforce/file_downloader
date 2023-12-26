@@ -3,7 +3,7 @@ require:
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.2
 
   NewCops: enable
   SuggestExtensions: false
@@ -125,6 +125,11 @@ RSpec/ExpectChange:
   EnforcedStyle: block
 
 RSpec/FilePath:
+  Enabled: false
+
+# let の名前の末尾が数字だと怒られる
+# ファイルの断片に意味ある名前を与えても仕方ない（連番以上に意味ある名前がない）のでやめる。
+RSpec/IndexedLet:
   Enabled: false
 
 # `let!` を許可している
