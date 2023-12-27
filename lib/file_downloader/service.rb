@@ -31,10 +31,11 @@ module FileDownloader
     def fetch_content_length(http, uri)
       http.use_ssl = true if uri.port == 443
 
-      res = http.head(uri.request_uri)
+      # net-httpによるリクエスト時のデフォルトのAccept-Encoding は ["gzip;q=1.0,deflate;q=0.6,identity;q=0.3"] だが、
+      # サーバによって圧縮後の Content-Length を返すケースがあるため、元のサイズを得る目的でHEADリクエストでは無圧縮とする
+      res = http.head(uri.request_uri, 'accept-encoding' => '')
       Status.check(res.code)
-      header = res.to_hash
-      header['content-length'][0]
+      res.content_length
     end
 
     def download_file(http, uri, content_length)
