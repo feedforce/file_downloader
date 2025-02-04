@@ -2,6 +2,10 @@ require 'file_downloader/status'
 require 'net/http'
 require 'logger'
 
+# OpenSSL 3.x の制約を回避するために `OpenSSL::SSL::SSLContext` に `OpenSSL::SSL::OP_LEGACY_SERVER_CONNECT` を設定する。
+# OpenSSL 3.x では「レガシーな TLS 再ネゴシエーション」がデフォルトで無効化されているため、これを有効化することで古い TLS 設定のサーバーとも通信できるようにする。
+OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:options] |= OpenSSL::SSL::OP_LEGACY_SERVER_CONNECT
+
 module FileDownloader
   class NoResponseBodyError < StandardError; end
   class NotEofError < StandardError; end
